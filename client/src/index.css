@@ -5,9 +5,150 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: normal !important;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+h1, h3, h4 {
+  color: white !important;
+  text-align: center;
+}
+canvas {
+  background-image:
+      linear-gradient(45deg, #ccc 25%, transparent 25%), 
+      linear-gradient(135deg, #ccc 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #ccc 75%),
+      linear-gradient(135deg, transparent 75%, #ccc 75%);
+    background-size:32px 32px; /* Must be a square */
+    background-position:0 0, 16px 0, 16px -16px, 0px 16px; /* Must be half of one side of the square */
+}
+
+.sketch > canvas {
+  background-image:
+      linear-gradient(45deg, #ccc 25%, transparent 25%), 
+      linear-gradient(135deg, #ccc 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #ccc 75%),
+      linear-gradient(135deg, transparent 75%, #ccc 75%);
+  background-size:8px 8px; /* Must be a square */
+  background-position:0 0, 4px 0, 4px -4px, 0px 4px; /* Must be half of one side of the square */
+  background-color: white;
+}
+
+.vertical-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-content {
+  margin: 3% auto;
+
+}
+
+.frame-preview {
+  padding: 8% 0;
+}
+
+.current-frame {
+  border:#1890ff 5px solid !important;
+}
+
+.ant-layout-sider {
+  background: rgb(19, 18, 18) !important;
+}
+
+.ant-layout-sider-children {
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  border-top: 1px rgb(233, 233, 233) solid;
+}
+
+.frame-box {
+  margin: 15px 0;
+  position: relative;
+  border: white 2px solid;
+  border-radius: 2px;
+}
+
+.frame-index {
+  position: absolute;
+  padding: 4px 6px;
+  background-color: rgba(0, 0, 0, 0.644) !important;
+  color: white;
+  font-size: larger;
+  border: white 1px solid;
+  border-radius: 2px;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.frame-box:hover .frame-btn {
+  display: inline-block !important;
+}
+
+.frame-btn {
+  background-color: rgba(0, 0, 0, 0.644) !important;
+  color: white !important;
+  position: absolute !important;
+  display: none !important;
+  z-index: 100;
+}
+
+.btm-right-btn {
+  bottom: 0;
+  right: 0;
+}
+
+.btm-left-btn {
+  bottom: 0;
+  left: 0;
+}
+
+
+.visible {
+  visibility: visible;
+}
+
+.ant-menu {
+  border-bottom: 1px rgb(233, 233, 233) solid;
+}
+
+.ant-menu-horizontal {
+  line-height: 35px;
+}
+
+.menu-tool-container {
+  width: 25px !important;
+}
+
+.menu-tool-icon {
+  margin-top: 75%;
+}
+
+.nav {
+  background: rgb(19, 18, 18) !important;
+  color: white !important;
+  padding: 0 40px !important;
+
+}
+
+.ant-layout-header{
+  padding: 0 !important;
+}
+
+.sketch-picker {
+  margin: 20px 0;
+}
+
+.draw-size-box {
+  margin-top: 20px;
 }

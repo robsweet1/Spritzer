@@ -10,8 +10,8 @@ const Navbar = () => {
     }
 
     return (
-        <Menu onClick={handleClick} selectedKeys={[current]} mode='horizontal'>
-            <Menu.Item key='home' icon={null}>
+        <Menu className='nav' onClick={handleClick} selectedKeys={[current]} mode='horizontal'>
+            <Menu.Item key='home'>
                 Home
             </Menu.Item>
             <Menu.Item key='browse'>
