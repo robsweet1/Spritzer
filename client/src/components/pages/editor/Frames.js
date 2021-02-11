@@ -1,23 +1,24 @@
-import Button from 'antd/es/button'
 import { useDispatch, useSelector} from 'react-redux'
-import { changeCurrentFrameId, selectFrames, addFrame, updateAllFrames } from '../../../features/editor-slices/framesSlice'
+import { changeCurrentFrameId, selectFrames, addFrame, updateAllFrames } from 'state-slices/framesSlice'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import Frame from './Frame'
+import Button from 'antd/es/button'
 import shortId from 'shortid'
 import LazyLoad from 'react-lazyload'
+import Frame from 'components/pages/editor/Frame'
 
-const Frames = () => {
+const Frames = (props) => {
     const dispatch = useDispatch()
     const framesArray = useSelector(selectFrames)
-    let numRows = 16
-    let numCols = 16
+
+    let width = props.width
+    let height = props.height
 
     const newFrame = () => {
         const id = shortId.generate()
         dispatch(addFrame(
             {
                 id: id, 
-                array: Array(numCols * numRows).fill({r: 0, g: 0, b: 0, a: 0})
+                array: Array(width * height).fill({r: 0, g: 0, b: 0, a: 0})
             }
         ))
         dispatch(changeCurrentFrameId(id))
@@ -39,19 +40,38 @@ const Frames = () => {
             <Droppable droppableId="droppable" >
                 {(provided) => {
                     return (
-                        <div ref={provided.innerRef} {...provided.droppableProps}>
+                        <div 
+                            ref={provided.innerRef} 
+                            {...provided.droppableProps}
+                        >
                             {framesArray.map((frame, index) => {
                                 return (
-                                    <LazyLoad height={200} once={true} overflow={true} key={frame.id} >
-                                    <Draggable draggableId={frame.id} index={index} className='frame-preview vertical-flex'>
-                                        {(provided) => {
-                                            return (
-                                                <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                    <Frame index={index} id={frame.id} array={frame.array}/>
-                                                    {provided.placeholder}
-                                                </div>
-                                        )}}
-                                    </Draggable>
+                                    <LazyLoad 
+                                        height={200} 
+                                        once={true} 
+                                        overflow={true} 
+                                        key={frame.id} 
+                                    >
+                                        <Draggable 
+                                            draggableId={frame.id} 
+                                            index={index} 
+                                            className='frame-preview vertical-flex'
+                                        >
+                                            {(provided) => {
+                                                return (
+                                                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                                        <Frame 
+                                                            index={index} 
+                                                            id={frame.id} 
+                                                            array={frame.array} 
+                                                            height={height} 
+                                                            width={width}
+                                                            scale={props.scale}
+                                                        />
+                                                        {provided.placeholder}
+                                                    </div>
+                                            )}}
+                                        </Draggable>
                                     </LazyLoad>
                                 )
                             })}

@@ -1,28 +1,26 @@
 import { useRef, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectFrames } from 'state-slices/framesSlice'
+import Sketch from 'react-p5'
 import Button from 'antd/es/button'
 import InputNumber from 'antd/es/input-number'
-import Sketch from 'react-p5'
-import { useSelector } from 'react-redux'
-import { selectFrames } from '../../../features/editor-slices/framesSlice'
 import { AiFillPauseCircle, AiFillPlayCircle } from 'react-icons/ai'
 
-const PreviewLoop = () => {
+const PreviewLoop = (props) => {
     const framesArray = useSelector(selectFrames)
     const frameIndex = useRef(0)
     const [p5Object, setP5Object] = useState()
     const [pauseTitle, setPauseTitle] = useState('Play')
 
-    let width = 128
-    let height = 128
-    let numRows = 16
-    let numCols = 16
-    let rectSize = 8
+    let width = props.width
+    let height = props.height
+    let scale = 128 / width
 
     const setup = (p5, canvasParentRef) => {
         setP5Object(p5)
         p5.noStroke()
         p5.colorMode('RGB', 255, 255, 255, 1)
-        p5.createCanvas(width, height).parent(canvasParentRef)
+        p5.createCanvas(width * scale, height * scale).parent(canvasParentRef)
         p5.frameRate(8)
         p5.noLoop()
     }
@@ -35,6 +33,7 @@ const PreviewLoop = () => {
     }
 
     const draw = (p5) => {
+        p5.scale(scale)
         p5.erase()
         p5.rect(0, 0, width, height)
         p5.noErase()
@@ -43,18 +42,20 @@ const PreviewLoop = () => {
             return
         }
         let currentFrame = framesArray[frameIndex.current].array
-        incrementIndex()
-        if (currentFrame === undefined)
+        if (!currentFrame || currentFrame.length !== (height * width)) {
+            incrementIndex()
             return
-        for(let x = 0; x < numRows; x++){
-            for(let y = 0; y < numCols; y++){
-                if(currentFrame[y * numCols + x] !== 0){
-                    let color = currentFrame[y * numCols + x]
+        }
+        for(let x = 0; x < height; x++){
+            for(let y = 0; y < width; y++){
+                if(currentFrame[y * width + x] !== 0){
+                    let color = currentFrame[y * width + x]
                     p5.fill(`rgba(${color['r']}, ${color['g']}, ${color['b']}, ${color['a']})`)
-                    p5.rect(x * rectSize, y * rectSize, rectSize, rectSize)
+                    p5.rect(x, y, 1, 1)
                 }
             }
         }
+        incrementIndex()
     }
 
     const pauseButton = () => {
@@ -93,7 +94,7 @@ const PreviewLoop = () => {
     return (
         <>
             <h3>Preview</h3>
-            <div className='vertical-flex frame-box' style={{width: width, height: height}} >
+            <div className='vertical-flex frame-box' style={{width: width * scale, height: height * scale}} >
                 <Sketch 
                     className='sketch' 
                     setup={setup} 

@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import shortId from 'shortid'
 const initialId = shortId.generate()
 const initialState = {currentFrameId: initialId, frames: [{id: initialId, array: []}]}
@@ -24,10 +24,8 @@ const framesSlice = createSlice({
         cloneFrame: (state, action) => {
             let index = state.frames.findIndex(item => item.id === action.payload.originalId) 
             state.frames.splice(index, 0, {id: action.payload.newId, array: action.payload.array})
-            console.log(current(state))
         },
         updateFrame: (state, action) => {
-            console.log(action.payload)
             state.frames.find(item => item.id === action.payload.id).array = action.payload.array
         },
         changeCurrentFrameId: (state, action) => {
