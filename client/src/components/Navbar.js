@@ -30,7 +30,7 @@ const Navbar = (props) => {
             <Menu className='nav' mode='horizontal'>
                 <Menu.Item key='auth'>
                     {auth && <Button onClick={() => dispatch(changeAuth(false))}>Log Out</Button>}
-                    {!auth && <Button onClick={() => dispatch(changeAuth(true))}>Log In</Button>}
+                    {!auth && <Button onClick={() => props.setAuthOpen(true)}>Log In</Button>}
                 </Menu.Item>
                 <Menu.Item key='signup'>
                     {!auth && <Button onClick={() => {props.setAuthOpen(true)}}>Sign Up</Button>}
