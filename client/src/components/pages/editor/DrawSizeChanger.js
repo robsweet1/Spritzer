@@ -15,7 +15,7 @@ const DrawSizeChanger = () => {
     return (
         <div className='draw-size-box'>
             <Title level={4}>Tool Size</Title>
-            <InputNumber min={1} max={8} defaultValue={1} onChange={changeSize}></InputNumber>
+            <InputNumber min={1} max={4} defaultValue={1} onChange={changeSize}></InputNumber>
         </div>
     )
 }

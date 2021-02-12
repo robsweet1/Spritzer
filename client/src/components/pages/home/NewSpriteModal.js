@@ -1,5 +1,7 @@
 import { useHistory } from 'react-router-dom'
-import Button from "antd/es/button"
+import { useSelector, useDispatch } from 'react-redux'
+import { selectCurrentFrameId, updateFrame } from 'state-slices/framesSlice'
+import Button from 'antd/es/button'
 import InputNumber from 'antd/es/input-number'
 import { Form, Input, } from 'antd'
 
@@ -7,13 +9,18 @@ import { Form, Input, } from 'antd'
 const NewSpriteModal = (props) => {
     const history = useHistory()
     const [form] = Form.useForm()
+    const currentFrameId = useSelector(selectCurrentFrameId)
+    const dispatch = useDispatch()
 
     const openNewSprite = () => {
+        let width = form.getFieldValue('width')
+        let name = form.getFieldValue('name')
         let state = {
-            name: form.getFieldValue('name'),
-            // height: form.getFieldValue('height'),
-            width: form.getFieldValue('width'),
+            name: name,
+            width: width,
         }
+        let gridArray = new Array(width * width).fill({r: 0, g: 0, b: 0, a: 0})
+        dispatch(updateFrame({id: currentFrameId, array: gridArray}))
         history.push('/editor', state)
     }
 
@@ -29,9 +36,6 @@ const NewSpriteModal = (props) => {
                 <Form.Item label='Dimensions' name='width' initialValue={32}>
                     <InputNumber min={8} max={64} step={8} />
                 </Form.Item>
-                {/* <Form.Item label='Height' name='height' initialValue={64}>
-                    <InputNumber min={8} max={64} step={32} />
-                </Form.Item> */}
                 <Form.Item >
                     <Button type="primary" onClick={openNewSprite}>Create Sprite</Button>
                 </Form.Item>

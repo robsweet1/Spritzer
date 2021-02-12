@@ -17,22 +17,23 @@ const EditorGrid = (props) => {
     let width = props.width
     let height = props.height
     let scale = 640 / width
+    let gridWidth = width * scale
 
 
-    useEffect(() => {
-        if(framesArray[0].array.length === [].length){
-            gridArray.current = new Array(width * height).fill({r: 0, g: 0, b: 0, a: 0})
-            console.log(gridArray.current)
-            updateFrameState(currentFrameId)
-        }
-    })
+    // useEffect(() => {
+    //     if(framesArray[0].array.length === [].length){
+    //         gridArray.current = new Array(width * height).fill({r: 0, g: 0, b: 0, a: 0})
+    //         console.log(gridArray.current)
+    //         updateFrameState(currentFrameId)
+    //     }
+    // })
     
     useEffect(() => {
         if(framesArray.find(item => item.id === currentFrameId)){
             gridArray.current = framesArray.find(array => array.id === currentFrameId).array.slice()
         }
            
-    })
+    }, [currentFrameId])
 
 
     const updateFrameState = (id) => {
@@ -41,7 +42,7 @@ const EditorGrid = (props) => {
     }
 
     const mouseGridCoords = (p5) => {
-        if (p5.mouseX > (width * scale) || p5.mouseY < 0 || p5.mouseY > (height * scale) || p5.mouseX < 0)
+        if (p5.mouseX > (gridWidth) || p5.mouseY < 0 || p5.mouseY > (gridWidth) || p5.mouseX < 0)
             return null
         let gridX = Math.floor(p5.mouseX / scale)
         let gridY = Math.floor(p5.mouseY / scale)
@@ -125,7 +126,7 @@ const EditorGrid = (props) => {
     const setup = (p5, canvasParentRef) => {
         p5.noStroke()
         p5.colorMode('RGB', 255, 255, 255, 1)
-        p5.createCanvas(width * scale, height * scale).parent(canvasParentRef)
+        p5.createCanvas(gridWidth, gridWidth).parent(canvasParentRef)
         gridArray.current = new Array(width * height).fill({r: 0, g: 0, b: 0, a: 0})
         updateFrameState(currentFrameId)
  

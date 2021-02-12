@@ -8,7 +8,7 @@ import { VscMirror } from 'react-icons/vsc'
 import DrawSizeChanger from 'components/pages/editor/DrawSizeChanger'
 
 const EditorTools = () => {
-    const [currentTool, setCurrentTool] = useState('draw')
+    const [currentTool, setCurrentTool] = useState('')
     const dispatch = useDispatch()
 
     const handleClick = e => {

@@ -3,6 +3,7 @@ import { Menu } from 'antd'
 import Button from 'antd/es/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAuth, changeAuth } from 'state-slices/authSlice'
+import { useEffect } from 'react'
 
 const Navbar = (props) => {
     const dispatch = useDispatch()
@@ -20,12 +21,19 @@ const Navbar = (props) => {
         )
     }
 
+    useEffect(() => {
+        console.log(auth)
+    })
+
     const RightMenu = () => {
         return(
             <Menu className='nav' mode='horizontal'>
                 <Menu.Item key='auth'>
                     {auth && <Button onClick={() => dispatch(changeAuth(false))}>Log Out</Button>}
                     {!auth && <Button onClick={() => dispatch(changeAuth(true))}>Log In</Button>}
+                </Menu.Item>
+                <Menu.Item key='signup'>
+                    {!auth && <Button onClick={() => {props.setAuthOpen(true)}}>Sign Up</Button>}
                 </Menu.Item>
             </Menu>
         )

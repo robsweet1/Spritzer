@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = { tool: 'draw', drawSize: 1 }
+const initialState = { tool: '', drawSize: 1 }
 
 const editorToolsSlice = createSlice({
     name: 'editorTools',

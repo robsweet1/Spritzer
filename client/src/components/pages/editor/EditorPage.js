@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux' 
+import { useBeforeunload } from 'react-beforeunload'
+import { Prompt } from 'react-router'
 import Layout from 'antd/es/layout'
 import Typography from 'antd/es/typography'
 import Navbar from 'components/Navbar'
@@ -24,16 +26,14 @@ const EditorPage = (props) => {
         }
     })
 
-    useEffect(() => {
-        window.addEventListener('beforeunload', beforeUnload)
-        return window.removeEventListener('beforeunload', beforeUnload)
-    })
-
-    const beforeUnload = (e) => {
-        e.preventDefault();
-      }
+    useBeforeunload((event) => event.preventDefault())
 
     return (
+        <>
+        <Prompt
+            when={true}
+            message='You have unsaved changes, are you sure you want to leave?'
+        />
         <Layout style={{ height: '100vh' }}>
             <Header>
                 <Navbar currentPage={'editor'} />
@@ -69,6 +69,7 @@ const EditorPage = (props) => {
             </Layout>
             <Footer></Footer>
         </Layout>
+        </>
     )
 }
 

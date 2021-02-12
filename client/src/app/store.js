@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import editorToolsReducer from 'editor-slices/editorToolsSlice'
-import colorPickerReducer from 'editor-slices/colorPickerSlice'
-import framesReducer from 'editor-slices/framesSlice'
-import authReducer from 'auth-slices/authSlice'
+import editorToolsReducer from 'state-slices/editorToolsSlice'
+import colorPickerReducer from 'state-slices/colorPickerSlice'
+import framesReducer from 'state-slices/framesSlice'
+import authReducer from 'state-slices/authSlice'
 
 export default configureStore({
   reducer: {
