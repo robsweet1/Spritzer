@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux' 
+import { useSelector } from 'react-redux'
 import { useBeforeunload } from 'react-beforeunload'
 import { Prompt } from 'react-router'
 import Layout from 'antd/es/layout'
@@ -14,14 +14,14 @@ import DrawSizeChanger from 'components/pages/editor/DrawSizeChanger'
 import { selectAuth } from 'state-slices/authSlice'
 
 
-const { Title } = Typography 
+const { Title } = Typography
 const { Header, Footer, Sider, Content } = Layout
 
 const EditorPage = (props) => {
     const auth = useSelector(selectAuth)
 
     useEffect(() => {
-        if(!auth) {
+        if (!auth) {
             props.history.push('/')
         }
     })
@@ -30,45 +30,45 @@ const EditorPage = (props) => {
 
     return (
         <>
-        <Prompt
-            when={true}
-            message='You have unsaved changes, are you sure you want to leave?'
-        />
-        <Layout style={{ height: '100vh' }}>
-            <Header>
-                <Navbar currentPage={'editor'} />
-            </Header>
-            <Layout>
-                <Sider width={250} >
-                    <ColorPicker />
-                    <PreviewLoop 
-                        height={props.location.state.width}
-                        width={props.location.state.width}
-                    />
-                    <DrawSizeChanger />
-                </Sider>
+            <Prompt
+                when={true}
+                message='You have unsaved changes, are you sure you want to leave?'
+            />
+            <Layout style={{ height: '100vh' }}>
+                <Header>
+                    <Navbar currentPage={'editor'} history={props.history}/>
+                </Header>
                 <Layout>
-                    <Content className='main-content' >
-                        <EditorTools />
-                        <EditorGrid 
+                    <Sider width={250} >
+                        <ColorPicker />
+                        <PreviewLoop
                             height={props.location.state.width}
                             width={props.location.state.width}
-                            name={props.location.state.name}
                         />
-                    </Content>
-                </Layout>
-                <Sider width={250}>
-                    <Title level={4} style={{marginTop: '15px'}}>
-                        Frame Sequence
+                        <DrawSizeChanger />
+                    </Sider>
+                    <Layout>
+                        <Content className='main-content' >
+                            <EditorTools />
+                            <EditorGrid
+                                height={props.location.state.width}
+                                width={props.location.state.width}
+                                name={props.location.state.name}
+                            />
+                        </Content>
+                    </Layout>
+                    <Sider width={250}>
+                        <Title level={4} style={{ marginTop: '15px' }}>
+                            Frame Sequence
                     </Title>
-                    <Frames 
-                        height={props.location.state.width}
-                        width={props.location.state.width}
-                    />
-                </Sider>
+                        <Frames
+                            height={props.location.state.width}
+                            width={props.location.state.width}
+                        />
+                    </Sider>
+                </Layout>
+                <Footer></Footer>
             </Layout>
-            <Footer></Footer>
-        </Layout>
         </>
     )
 }

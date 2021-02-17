@@ -19,8 +19,8 @@ const NewSpriteModal = (props) => {
             name: name,
             width: width,
         }
-        let gridArray = new Array(width * width).fill({r: 0, g: 0, b: 0, a: 0})
-        dispatch(updateFrame({id: currentFrameId, array: gridArray}))
+        let gridArray = new Array(width * width).fill({ r: 0, g: 0, b: 0, a: 0 })
+        dispatch(updateFrame({ id: currentFrameId, array: gridArray }))
         history.push('/editor', state)
     }
 
@@ -31,7 +31,7 @@ const NewSpriteModal = (props) => {
                 form={form}
             >
                 <Form.Item label='Name' name='name' initialValue='untitledSprite'>
-                    <Input placeholder='Mario'/>
+                    <Input placeholder='Mario' />
                 </Form.Item>
                 <Form.Item label='Dimensions' name='width' initialValue={32}>
                     <InputNumber min={8} max={64} step={8} />
@@ -40,7 +40,7 @@ const NewSpriteModal = (props) => {
                     <Button type="primary" onClick={openNewSprite}>Create Sprite</Button>
                 </Form.Item>
                 <Form.Item>
-                    <Button onClick={() => {props.setModalOpen(false)}}>Close Modal</Button>
+                    <Button onClick={() => { props.setModalOpen(false) }}>Close Modal</Button>
                 </Form.Item>
             </Form>
         </div>

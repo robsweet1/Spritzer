@@ -15,6 +15,7 @@
     "react-beautiful-dnd": "^13.0.0",
     "react-beforeunload": "^2.4.0",
     "react-color": "^2.19.3",
+    "react-cookie": "^4.0.3",
     "react-dom": "^17.0.1",
     "react-icons": "^4.1.0",
     "react-lazyload": "^3.1.0",

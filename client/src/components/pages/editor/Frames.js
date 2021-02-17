@@ -1,4 +1,4 @@
-import { useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { changeCurrentFrameId, selectFrames, addFrame, updateAllFrames } from 'state-slices/framesSlice'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import Button from 'antd/es/button'
@@ -17,8 +17,8 @@ const Frames = (props) => {
         const id = shortId.generate()
         dispatch(addFrame(
             {
-                id: id, 
-                array: Array(width * height).fill({r: 0, g: 0, b: 0, a: 0})
+                id: id,
+                array: Array(width * height).fill({ r: 0, g: 0, b: 0, a: 0 })
             }
         ))
         dispatch(changeCurrentFrameId(id))
@@ -40,44 +40,46 @@ const Frames = (props) => {
             <Droppable droppableId="droppable" >
                 {(provided) => {
                     return (
-                        <div 
-                            ref={provided.innerRef} 
+                        <div
+                            ref={provided.innerRef}
                             {...provided.droppableProps}
                         >
                             {framesArray.map((frame, index) => {
                                 return (
-                                    <LazyLoad 
-                                        height={200} 
-                                        once={true} 
-                                        overflow={true} 
-                                        key={frame.id} 
+                                    <LazyLoad
+                                        height={200}
+                                        once={true}
+                                        overflow={true}
+                                        key={frame.id}
                                     >
-                                        <Draggable 
-                                            draggableId={frame.id} 
-                                            index={index} 
+                                        <Draggable
+                                            draggableId={frame.id}
+                                            index={index}
                                             className='frame-preview vertical-flex'
                                         >
                                             {(provided) => {
                                                 return (
                                                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                        <Frame 
-                                                            index={index} 
-                                                            id={frame.id} 
-                                                            array={frame.array} 
-                                                            height={height} 
+                                                        <Frame
+                                                            index={index}
+                                                            id={frame.id}
+                                                            array={frame.array}
+                                                            height={height}
                                                             width={width}
                                                             scale={props.scale}
                                                         />
                                                         {provided.placeholder}
                                                     </div>
-                                            )}}
+                                                )
+                                            }}
                                         </Draggable>
                                     </LazyLoad>
                                 )
                             })}
                             {provided.placeholder}
                         </div>
-                )}}
+                    )
+                }}
             </Droppable>
             <Button onClick={newFrame}>
                 Add Frame

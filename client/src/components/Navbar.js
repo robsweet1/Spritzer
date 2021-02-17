@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
 import Button from 'antd/es/button'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectAuth, changeAuth } from 'state-slices/authSlice'
+import { useCookies } from 'react-cookie'
 import { useEffect } from 'react'
 
 const Navbar = (props) => {
-    const dispatch = useDispatch()
-    const auth = useSelector(selectAuth)
+    const [cookies, setCookie, removeCookie] = useCookies()
+
+    useEffect(() => {
+        console.log(cookies)
+    })
 
     const LeftMenu = () => {
         return  (
@@ -21,22 +23,28 @@ const Navbar = (props) => {
         )
     }
 
-    useEffect(() => {
-        console.log(auth)
-    })
-
     const RightMenu = () => {
         return(
             <Menu className='nav' mode='horizontal'>
                 <Menu.Item key='auth'>
-                    {auth && <Button onClick={() => dispatch(changeAuth(false))}>Log Out</Button>}
-                    {!auth && <Button onClick={() => props.setAuthOpen(true)}>Log In</Button>}
+                    {cookies.token && <Button onClick={() => handleLogout()}>Log Out</Button>}
+                    {!cookies.token && <Button onClick={() => openMenu('login')}>Log In</Button>}
                 </Menu.Item>
                 <Menu.Item key='signup'>
-                    {!auth && <Button onClick={() => {props.setAuthOpen(true)}}>Sign Up</Button>}
+                    {!cookies.token && <Button onClick={() => openMenu('signup')}>Sign Up</Button>}
                 </Menu.Item>
             </Menu>
         )
+    }
+
+    const openMenu = (type) => {
+        props.setAuthType(type)
+        props.setAuthOpen(true)
+    }
+
+    const handleLogout = () => {
+        removeCookie('token')
+        props.history.push('/')
     }
 
     return (
