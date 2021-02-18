@@ -1,14 +1,16 @@
 import { useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectCurrentFrameId, updateFrame } from 'state-slices/framesSlice'
+import { initName, initEmail, selectCurrentFrameId, updateFrame } from 'state-slices/framesSlice'
 import Button from 'antd/es/button'
 import InputNumber from 'antd/es/input-number'
 import { Form, Input, } from 'antd'
+import { useCookies } from 'react-cookie'
 
 
 const NewSpriteModal = (props) => {
     const history = useHistory()
     const [form] = Form.useForm()
+    const [cookies] = useCookies()
     const currentFrameId = useSelector(selectCurrentFrameId)
     const dispatch = useDispatch()
 
@@ -20,6 +22,8 @@ const NewSpriteModal = (props) => {
             width: width,
         }
         let gridArray = new Array(width * width).fill({ r: 0, g: 0, b: 0, a: 0 })
+        dispatch(initEmail(cookies.email))
+        dispatch(initName(name))
         dispatch(updateFrame({ id: currentFrameId, array: gridArray }))
         history.push('/editor', state)
     }

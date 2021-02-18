@@ -111,8 +111,11 @@ const EditorGrid = (props) => {
                 }
             }
         }
-        if (different)
+        if (different) {
             updateFrameState(currentFrameId)
+            props.setSaved(false)
+        }
+            
     }
 
     const colorEqual = (c1, c2) => {

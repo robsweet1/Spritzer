@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useCookies } from 'react-cookie'
 import { useBeforeunload } from 'react-beforeunload'
 import { Prompt } from 'react-router'
 import Layout from 'antd/es/layout'
@@ -11,17 +11,17 @@ import EditorTools from 'components/pages/editor/EditorTools'
 import PreviewLoop from 'components/pages/editor/PreviewLoop'
 import Frames from 'components/pages/editor/Frames'
 import DrawSizeChanger from 'components/pages/editor/DrawSizeChanger'
-import { selectAuth } from 'state-slices/authSlice'
-
 
 const { Title } = Typography
 const { Header, Footer, Sider, Content } = Layout
 
 const EditorPage = (props) => {
-    const auth = useSelector(selectAuth)
+    const [saved, setSaved] = useState(false)
+
+    const [cookies] = useCookies(['token'])
 
     useEffect(() => {
-        if (!auth) {
+        if (!cookies.token) {
             props.history.push('/')
         }
     })
@@ -31,12 +31,12 @@ const EditorPage = (props) => {
     return (
         <>
             <Prompt
-                when={true}
+                when={!saved}
                 message='You have unsaved changes, are you sure you want to leave?'
             />
             <Layout style={{ height: '100vh' }}>
                 <Header>
-                    <Navbar currentPage={'editor'} history={props.history}/>
+                    <Navbar currentPage={'editor'} history={props.history} saveButton={true} setSaved={setSaved}/>
                 </Header>
                 <Layout>
                     <Sider width={250} >
@@ -51,6 +51,7 @@ const EditorPage = (props) => {
                         <Content className='main-content' >
                             <EditorTools />
                             <EditorGrid
+                                setSaved={setSaved}
                                 height={props.location.state.width}
                                 width={props.location.state.width}
                                 name={props.location.state.name}

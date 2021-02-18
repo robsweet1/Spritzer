@@ -2,7 +2,6 @@ import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { Button, Form, Input, Tabs } from 'antd'
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
-import { useEffect } from 'react';
 
 const { TabPane } = Tabs;
 
@@ -20,6 +19,7 @@ const AuthModal = (props) => {
             .then(response => {
                 if (authType === 'login') {
                     setCookie('token', response.data.token, { sameSite: true, path: '/' })
+                    setCookie('email', email, { sameSite: true, path: '/' })
                     props.setAuthOpen(false)
                     props.history.push('/profile')
                 }
