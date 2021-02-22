@@ -5,7 +5,7 @@ const cors = require('cors')
 require('dotenv').config()
 require('./auth/auth')
 const routes = require('./routes/routes')
-const secureRoutes = require('./routes/secureRoutes')
+const secureRoutes = require('./routes/secure/secureRoutes')
 
 const port = process.env.PORT || 5000
 
@@ -20,12 +20,11 @@ mongoose
 
 
         const app = express()
+        app.use(cors())
         app.use(express.json())
         app.use(express.urlencoded({ extended: true }))
-        app.use(cors())
 
         app.use('/api', routes)
-
         app.use('/api/secure', passport.authenticate('jwt', { session: false }), secureRoutes)
 
         app.use(function(err, req, res, next) {

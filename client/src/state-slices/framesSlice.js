@@ -41,10 +41,18 @@ const framesSlice = createSlice({
         updateAllFrames: (state, action) => {
             state.frames = action.payload
         },
+        resetFramesState: (state) => {
+            const frameId = shortId.generate()
+            state.id = shortId.generate()
+            state.currentFrameId = frameId
+            state.frames = [{ id: frameId, array: [] }]
+            state.email = ''
+            state.name = ''
+        }
     },
 })
 
-export const { initName, initEmail, addFrame, removeFrame, updateFrame, cloneFrame, changeCurrentFrameId, updateAllFrames } = framesSlice.actions
+export const { initName, initEmail, addFrame, removeFrame, updateFrame, cloneFrame, changeCurrentFrameId, updateAllFrames, resetFramesState } = framesSlice.actions
 export default framesSlice.reducer
 
 export const selectId = state => state.frames.id

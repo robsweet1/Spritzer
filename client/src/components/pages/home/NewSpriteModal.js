@@ -24,6 +24,7 @@ const NewSpriteModal = (props) => {
         let gridArray = new Array(width * width).fill({ r: 0, g: 0, b: 0, a: 0 })
         dispatch(initEmail(cookies.email))
         dispatch(initName(name))
+        console.log(currentFrameId)
         dispatch(updateFrame({ id: currentFrameId, array: gridArray }))
         history.push('/editor', state)
     }

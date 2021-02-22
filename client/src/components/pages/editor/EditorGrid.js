@@ -1,9 +1,9 @@
 import Sketch from 'react-p5'
 import { useEffect, useRef} from 'react'
 import { useSelector, useDispatch} from 'react-redux'
-import { selectDrawSize, selectEditorTool } from 'state-slices/editorToolsSlice'
-import { selectColor, changeColor } from 'state-slices/colorPickerSlice'
-import { selectFrames, selectCurrentFrameId, updateFrame } from 'state-slices/framesSlice'
+import { resetTool, selectDrawSize, selectEditorTool } from 'state-slices/editorToolsSlice'
+import { selectColor, changeColor, resetColor } from 'state-slices/colorPickerSlice'
+import { selectFrames, selectCurrentFrameId, updateFrame, resetFramesState } from 'state-slices/framesSlice'
 
 const EditorGrid = (props) => {
     const mapTool = useSelector(selectEditorTool)
@@ -20,13 +20,13 @@ const EditorGrid = (props) => {
     let gridWidth = width * scale
 
 
-    // useEffect(() => {
-    //     if(framesArray[0].array.length === [].length){
-    //         gridArray.current = new Array(width * height).fill({r: 0, g: 0, b: 0, a: 0})
-    //         console.log(gridArray.current)
-    //         updateFrameState(currentFrameId)
-    //     }
-    // })
+    useEffect(() => {
+        return () => {
+            dispatch(resetFramesState())
+            dispatch(resetTool())
+            dispatch(resetColor())
+        }
+    }, [])
     
     useEffect(() => {
         if(framesArray.find(item => item.id === currentFrameId)){

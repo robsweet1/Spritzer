@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { login, signup } from 'api/auth'
 import { useCookies } from 'react-cookie'
 import { Button, Form, Input, Tabs } from 'antd'
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
@@ -12,21 +13,38 @@ const AuthModal = (props) => {
     const handleAuth = async (authType) => {
         let email = form.getFieldValue('email')
         let password = form.getFieldValue('password')
-        axios.post(`http://localhost:5000/api/auth/${authType}`, {
-            email: email,
-            password: password
-        })
-            .then(response => {
-                if (authType === 'login') {
-                    setCookie('token', response.data.token, { sameSite: true, path: '/' })
+        if (authType === 'login') {
+            login(email, password)
+                .then(data => {
+                    setCookie('token', data.token, { sameSite: true, path: '/' })
                     setCookie('email', email, { sameSite: true, path: '/' })
                     props.setAuthOpen(false)
                     props.history.push('/profile')
-                }
-            })
-            .catch(error => {
-                console.log(error)
-            })
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        }
+        else if (authType === 'signup') {
+            signup(email, password)
+                .then(data => console.log(data))
+                .catch(error => console.log(error))
+        }
+        // axios.post(`http://localhost:5000/api/auth/${authType}`, {
+        //     email: email,
+        //     password: password
+        // })
+        //     .then(response => {
+        //         if (authType === 'login') {
+        //             setCookie('token', response.data.token, { sameSite: true, path: '/' })
+        //             setCookie('email', email, { sameSite: true, path: '/' })
+        //             props.setAuthOpen(false)
+        //             props.history.push('/profile')
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log(error)
+        //     })
     }
 
     return (

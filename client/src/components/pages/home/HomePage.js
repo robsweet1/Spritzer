@@ -3,7 +3,7 @@ import Button from 'antd/es/button'
 import Layout from 'antd/es/layout'
 import Navbar from 'components/Navbar'
 import NewSpriteModal from 'components/pages/home/NewSpriteModal'
-import AuthModal from './AuthModal'
+import AuthModal from 'components/pages/home/AuthModal'
 
 const { Header, Footer, Sider, Content } = Layout
 
