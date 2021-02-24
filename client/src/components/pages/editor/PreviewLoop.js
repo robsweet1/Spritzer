@@ -1,19 +1,23 @@
 import { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectFrames } from 'state-slices/framesSlice'
+import { selectFrames, selectDimensions } from 'state-slices/framesSlice'
 import Sketch from 'react-p5'
-import Button from 'antd/es/button'
+
+import Button from '@material-ui/core/Button'
+
+// import Button from 'antd/es/button'
 import InputNumber from 'antd/es/input-number'
 import { AiFillPauseCircle, AiFillPlayCircle } from 'react-icons/ai'
 
 const PreviewLoop = (props) => {
     const framesArray = useSelector(selectFrames)
+    const dimensions = useSelector(selectDimensions)
     const frameIndex = useRef(0)
     const [p5Object, setP5Object] = useState()
     const [pauseTitle, setPauseTitle] = useState('Play')
 
-    let width = props.width
-    let height = props.height
+    let width = dimensions.width
+    let height = dimensions.height
     let scale = 128 / width
 
     const setup = (p5, canvasParentRef) => {
@@ -102,7 +106,7 @@ const PreviewLoop = (props) => {
                     mousePressed={haltLoop} 
                     mouseReleased={haltLoop}
                 />
-                <Button className='frame-btn visible btm-left-btn' onClick={pauseButton}>
+                <Button className='frame-btn visible btm-left-btn' color='primary' onClick={pauseButton}>
                     {pauseTitle === 'Play' ? <AiFillPlayCircle /> : <AiFillPauseCircle /> }
                 </Button>
             </div>

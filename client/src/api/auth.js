@@ -8,7 +8,10 @@ export const login = (email, password) => {
         password: password
     })
         .then(response => response.data)
-        .catch(error => error)
+        .catch(error => {
+            console.log(error)
+            throw error
+        })
 }
 
 export const signup = (email, password) => {
@@ -18,7 +21,10 @@ export const signup = (email, password) => {
         password: password
     })
         .then(response => response.data)
-        .catch(error => error)
+        .catch(error => {
+            console.log(error)
+            throw error
+        })
 }
 
 
@@ -32,5 +38,8 @@ export const getProfile = (token) => {
             }
         })
         .then(response => response.data.user)
-        .catch(error => error)
+        .catch(error => {
+            console.log(error)
+            throw error
+        })
 }

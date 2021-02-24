@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react'
 import { useDispatch, useSelector} from 'react-redux'
-import { changeCurrentFrameId, selectFrames, selectCurrentFrameId, removeFrame, cloneFrame} from 'state-slices/framesSlice'
+import { changeCurrentFrameId, selectFrames, selectCurrentFrameId, selectDimensions, removeFrame, cloneFrame} from 'state-slices/framesSlice'
 import Button from 'antd/es/button'
 import Sketch from 'react-p5'
 import shortId from 'shortid'
@@ -12,10 +12,11 @@ const Frame = (props) => {
     const dispatch = useDispatch()
     const currentFrameId = useSelector(selectCurrentFrameId)
     const framesArray = useSelector(selectFrames)
+    const dimensions = useSelector(selectDimensions)
     const frameRef = useRef()
 
-    let width = props.width
-    let height = props.height
+    let width = dimensions.width
+    let height = dimensions.height
     let scale = 128 / width
 
     useEffect(() => {

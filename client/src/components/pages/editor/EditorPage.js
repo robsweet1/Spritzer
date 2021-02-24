@@ -12,12 +12,17 @@ import PreviewLoop from 'components/pages/editor/PreviewLoop'
 import Frames from 'components/pages/editor/Frames'
 import DrawSizeChanger from 'components/pages/editor/DrawSizeChanger'
 
+import { useDispatch} from 'react-redux'
+import { resetTool} from 'state-slices/editorToolsSlice'
+import { resetColor } from 'state-slices/colorPickerSlice'
+import { resetFramesState } from 'state-slices/framesSlice'
+
 const { Title } = Typography
 const { Header, Footer, Sider, Content } = Layout
 
 const EditorPage = (props) => {
+    const dispatch = useDispatch()
     const [saved, setSaved] = useState(false)
-
     const [cookies] = useCookies(['token'])
 
     useEffect(() => {
@@ -25,6 +30,15 @@ const EditorPage = (props) => {
             props.history.push('/')
         }
     })
+
+
+    useEffect(() => {
+        return () => {
+            dispatch(resetFramesState())
+            dispatch(resetTool())
+            dispatch(resetColor())
+        }
+    }, [])
 
     useBeforeunload((event) => event.preventDefault())
 
@@ -41,31 +55,20 @@ const EditorPage = (props) => {
                 <Layout>
                     <Sider width={250} >
                         <ColorPicker />
-                        <PreviewLoop
-                            height={props.location.state.width}
-                            width={props.location.state.width}
-                        />
+                        <PreviewLoop />
                         <DrawSizeChanger />
                     </Sider>
                     <Layout>
                         <Content className='main-content' >
                             <EditorTools />
-                            <EditorGrid
-                                setSaved={setSaved}
-                                height={props.location.state.width}
-                                width={props.location.state.width}
-                                name={props.location.state.name}
-                            />
+                            <EditorGrid setSaved={setSaved} />
                         </Content>
                     </Layout>
                     <Sider width={250}>
                         <Title level={4} style={{ marginTop: '15px' }}>
                             Frame Sequence
-                    </Title>
-                        <Frames
-                            height={props.location.state.width}
-                            width={props.location.state.width}
-                        />
+                        </Title>
+                        <Frames />
                     </Sider>
                 </Layout>
                 <Footer></Footer>

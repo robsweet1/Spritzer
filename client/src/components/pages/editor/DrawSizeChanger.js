@@ -1,21 +1,34 @@
 import { useDispatch } from 'react-redux'
 import { changeDrawSize } from 'state-slices/editorToolsSlice'
-import InputNumber from 'antd/es/input-number'
-import Typography from 'antd/es/typography'
-const { Title } = Typography
+
+import Typography from '@material-ui/core/Typography'
+import Slider from '@material-ui/core/Slider'
+
 
 const DrawSizeChanger = () => {
     const dispatch = useDispatch()
 
 
-    const changeSize = (newSize) => {
+    const changeSize = (event, newSize) => {
         dispatch(changeDrawSize(newSize))
     }
 
     return (
         <div className='draw-size-box'>
-            <Title level={4}>Tool Size</Title>
-            <InputNumber min={1} max={4} defaultValue={1} onChange={changeSize}></InputNumber>
+            <Typography id='drawSize-slider' gutterBottom>
+                Tool Size
+            </Typography>
+            <Slider
+                defaultValue={1}
+                // getAriaValueText={valuetext}
+                aria-labelledby="drawSize-slider"
+                valueLabelDisplay="auto"
+                step={1}
+                marks
+                min={1}
+                max={4}
+                onChange={changeSize}
+            />
         </div>
     )
 }

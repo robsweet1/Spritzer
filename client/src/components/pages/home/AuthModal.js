@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { login, signup } from 'api/auth'
 import { useCookies } from 'react-cookie'
 import { Button, Form, Input, Tabs } from 'antd'
@@ -16,12 +15,15 @@ const AuthModal = (props) => {
         if (authType === 'login') {
             login(email, password)
                 .then(data => {
+                    console.log('hit then')
+                    console.log(data)
                     setCookie('token', data.token, { sameSite: true, path: '/' })
                     setCookie('email', email, { sameSite: true, path: '/' })
                     props.setAuthOpen(false)
                     props.history.push('/profile')
                 })
                 .catch(error => {
+                    console.log('hit error')
                     console.log(error)
                 })
         }

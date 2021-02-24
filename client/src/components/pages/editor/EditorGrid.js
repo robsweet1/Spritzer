@@ -3,19 +3,20 @@ import { useEffect, useRef} from 'react'
 import { useSelector, useDispatch} from 'react-redux'
 import { resetTool, selectDrawSize, selectEditorTool } from 'state-slices/editorToolsSlice'
 import { selectColor, changeColor, resetColor } from 'state-slices/colorPickerSlice'
-import { selectFrames, selectCurrentFrameId, updateFrame, resetFramesState } from 'state-slices/framesSlice'
+import { selectFrames, selectCurrentFrameId, updateFrame, resetFramesState, selectDimensions } from 'state-slices/framesSlice'
 
 const EditorGrid = (props) => {
     const mapTool = useSelector(selectEditorTool)
     const drawSize = useSelector(selectDrawSize)
     const color = useSelector(selectColor)
     const framesArray = useSelector(selectFrames)
+    const dimensions = useSelector(selectDimensions)
     const currentFrameId = useSelector(selectCurrentFrameId)
     const gridArray = useRef([])
     const dispatch = useDispatch()
 
-    let width = props.width
-    let height = props.height
+    let width = dimensions.width
+    let height = dimensions.height
     let scale = 640 / width
     let gridWidth = width * scale
 
@@ -130,9 +131,6 @@ const EditorGrid = (props) => {
         p5.noStroke()
         p5.colorMode('RGB', 255, 255, 255, 1)
         p5.createCanvas(gridWidth, gridWidth).parent(canvasParentRef)
-        gridArray.current = new Array(width * height).fill({r: 0, g: 0, b: 0, a: 0})
-        updateFrameState(currentFrameId)
- 
     }
 
     const draw = (p5) => {

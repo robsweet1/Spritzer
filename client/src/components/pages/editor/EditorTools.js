@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { changeTool } from 'state-slices/editorToolsSlice'
 import Menu from 'antd/es/menu'
+import DrawSizeChanger from 'components/pages/editor/DrawSizeChanger'
+
 import { BiPencil, BiEraser } from 'react-icons/bi'
 import { IoEyedropSharp } from 'react-icons/io5'
 import { VscMirror } from 'react-icons/vsc'
-import DrawSizeChanger from 'components/pages/editor/DrawSizeChanger'
 
 const EditorTools = () => {
     const [currentTool, setCurrentTool] = useState('')

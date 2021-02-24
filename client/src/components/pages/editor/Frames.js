@@ -1,17 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { changeCurrentFrameId, selectFrames, addFrame, updateAllFrames } from 'state-slices/framesSlice'
+import { changeCurrentFrameId, selectFrames, selectDimensions, addFrame, updateAllFrames } from 'state-slices/framesSlice'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import Button from 'antd/es/button'
 import shortId from 'shortid'
-import LazyLoad from 'react-lazyload'
+// import LazyLoad from 'react-lazyload'
 import Frame from 'components/pages/editor/Frame'
 
 const Frames = (props) => {
     const dispatch = useDispatch()
     const framesArray = useSelector(selectFrames)
+    const dimensions = useSelector(selectDimensions)
 
-    let width = props.width
-    let height = props.height
+    let width = dimensions.width
+    let height = dimensions.height
 
     const newFrame = () => {
         const id = shortId.generate()
@@ -46,12 +47,12 @@ const Frames = (props) => {
                         >
                             {framesArray.map((frame, index) => {
                                 return (
-                                    <LazyLoad
-                                        height={200}
-                                        once={true}
-                                        overflow={true}
-                                        key={frame.id}
-                                    >
+                                    // <LazyLoad
+                                    //     height={200}
+                                    //     once={true}
+                                    //     overflow={true}
+                                    //     key={frame.id}
+                                    // >
                                         <Draggable
                                             draggableId={frame.id}
                                             index={index}
@@ -73,7 +74,7 @@ const Frames = (props) => {
                                                 )
                                             }}
                                         </Draggable>
-                                    </LazyLoad>
+                                    // </LazyLoad>
                                 )
                             })}
                             {provided.placeholder}

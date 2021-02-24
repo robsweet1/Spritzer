@@ -10,7 +10,7 @@ const colorPickerSlice = createSlice({
             state.color = action.payload
         },
         resetColor: (state) => {
-            state.color = { r: 0, g: 0, b: 0, a: 0 }
+            state.color = { r: 0, g: 0, b: 0, a: 1 }
         }
     },
 })

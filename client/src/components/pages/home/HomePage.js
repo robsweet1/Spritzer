@@ -12,6 +12,7 @@ const HomePage = (props) => {
     const [authOpen, setAuthOpen] = useState(false)
     const [authType, setAuthType] = useState('signup')
 
+
     return (
         <Layout style={{ height: '100vh' }}>
             {modalOpen ? <NewSpriteModal setModalOpen={setModalOpen} /> : null}
