@@ -1,17 +1,67 @@
+import { useState } from 'react'
 import { login, signup } from 'api/auth'
 import { useCookies } from 'react-cookie'
-import { Button, Form, Input, Tabs } from 'antd'
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import Box from '@material-ui/core/Box'
+import TextField from '@material-ui/core/TextField'
+import makeStyles from '@material-ui/styles/makeStyles'
 
-const { TabPane } = Tabs;
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box p={3}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
+
+const useStyles = makeStyles({
+    tabs: {
+        backgroundColor: 'black',
+        color: 'white',
+    },
+    panel: {
+        backgroundColor: 'white',
+        color: 'black',
+    },
+    form: {
+        display: 'flex',
+        flexDirection: 'column'
+    }
+})
+
+
 
 const AuthModal = (props) => {
-    const [form] = Form.useForm()
+    const classes = useStyles()
+    const [value, setValue] = useState(0)
     const [cookies, setCookie] = useCookies(['token', 'loggedin'])
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
     const handleAuth = async (authType) => {
-        let email = form.getFieldValue('email')
-        let password = form.getFieldValue('password')
         if (authType === 'login') {
             login(email, password)
                 .then(data => {
@@ -32,71 +82,46 @@ const AuthModal = (props) => {
                 .then(data => console.log(data))
                 .catch(error => console.log(error))
         }
-        // axios.post(`http://localhost:5000/api/auth/${authType}`, {
-        //     email: email,
-        //     password: password
-        // })
-        //     .then(response => {
-        //         if (authType === 'login') {
-        //             setCookie('token', response.data.token, { sameSite: true, path: '/' })
-        //             setCookie('email', email, { sameSite: true, path: '/' })
-        //             props.setAuthOpen(false)
-        //             props.history.push('/profile')
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.log(error)
-        //     })
+    }
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue)
+    }
+
+    const emailChange = (event) => {
+        setEmail(event.target.value)
+    }
+
+    const passwordChange = (event) => {
+        setPassword(event.target.value)
     }
 
     return (
         <div className='modal-box'>
-            <Tabs defaultActiveKey={props.authType}>
-                <TabPane tab='Sign Up' key='signup'>
-                    <Form
-                        layout='horizontal'
-                        form={form}
-                    >
-                        <Form.Item label='Email' name='email' initialValue=''>
-                            <Input placeholder='email@email.com' />
-                        </Form.Item>
-                        <Form.Item label='Password' name='password' initialValue=''>
-                            <Input.Password
-                                placeholder='password'
-                                iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                            />
-                        </Form.Item>
-                        <Form.Item >
-                            <Button type='primary' onClick={() => handleAuth('signup')}>Sign Up</Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button onClick={() => { props.setAuthOpen(false) }}>Close</Button>
-                        </Form.Item>
-                    </Form>
-                </TabPane>
-                <TabPane tab='Log In' key='login'>
-                    <Form
-                        layout='horizontal'
-                        form={form}
-                    >
-                        <Form.Item label='Email' name='email' initialValue=''>
-                            <Input placeholder='email@email.com' />
-                        </Form.Item>
-                        <Form.Item label='Password' name='password' initialValue=''>
-                            <Input.Password
-                                placeholder='password'
-                                iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                            />
-                        </Form.Item>
-                        <Form.Item >
-                            <Button type='primary' onClick={() => handleAuth('login')}>Log In</Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button onClick={() => { props.setAuthOpen(false) }}>Close</Button>
-                        </Form.Item>
-                    </Form>
-                </TabPane>
-            </Tabs>
+            <Box>
+                <Toolbar className={classes.tabs}>
+                    <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+                        <Tab label="Log In" {...a11yProps(0)} />
+                        <Tab label="Sign Up" {...a11yProps(1)} />
+                    </Tabs>
+                </Toolbar>
+                <TabPanel value={value} index={0} className={classes.panel} >
+                    <form noValidate className={classes.form}>
+                        <TextField required id="email" label="email" defaultValue={email} onChange={emailChange} />
+                        <TextField required id="password" label='password' type='password' defaultValue={password} onChange={passwordChange}/>
+                        <Button onClick={() => handleAuth('login')}>Log In</Button>
+                        <Button onClick={() => { props.setAuthOpen(false) }}>Close</Button>
+                    </form>
+                </TabPanel>
+                <TabPanel value={value} index={1} className={classes.panel}>
+                    <form noValidate className={classes.form}>
+                        <TextField required id="email" label="email" defaultValue={email} onChange={emailChange} />
+                        <TextField required id="password" label='password' type='password' defaultValue={password} onChange={passwordChange}/>
+                        <Button onClick={() => handleAuth('signup')}>Sign Up</Button>
+                        <Button onClick={() => { props.setAuthOpen(false) }}>Close</Button>
+                    </form>
+                </TabPanel>
+            </Box>
         </div>
     )
 }

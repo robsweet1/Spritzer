@@ -1,7 +1,10 @@
 import { useRef, useEffect } from 'react'
 import { useDispatch, useSelector} from 'react-redux'
 import { changeCurrentFrameId, selectFrames, selectCurrentFrameId, selectDimensions, removeFrame, cloneFrame} from 'state-slices/framesSlice'
-import Button from 'antd/es/button'
+
+import Button from '@material-ui/core/Button'
+import Tooltip from '@material-ui/core/Tooltip'
+
 import Sketch from 'react-p5'
 import shortId from 'shortid'
 import { IoCopy } from 'react-icons/io5'
@@ -88,13 +91,17 @@ const Frame = (props) => {
                     mouseClicked={(p5) => {mouseClicked(p5, props.id)}} 
                 />
                 {framesArray.length > 1 && 
-                    <Button className={'frame-btn btm-left-btn'} onClick={() => dispatch(removeFrame(props.id))}>
-                        <AiFillDelete/>
-                    </Button>
+                    <Tooltip title='Delete'>
+                        <Button className='frame-btn btm-left-btn' onClick={() => dispatch(removeFrame(props.id))}>
+                            <AiFillDelete/>
+                        </Button>
+                    </Tooltip>
                 }
-                <Button className={'frame-btn btm-right-btn'} onClick={() => dupeFrame(props.id, props.array)}>
-                    <IoCopy/>
-                </Button>
+                <Tooltip title='Clone'>
+                    <Button className='frame-btn btm-right-btn' onClick={() => dupeFrame(props.id, props.array)}>
+                        <IoCopy/>
+                    </Button>
+                </Tooltip>
             </div>
         </div>
     )

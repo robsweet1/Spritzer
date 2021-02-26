@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { useBeforeunload } from 'react-beforeunload'
 import { Prompt } from 'react-router'
-import Layout from 'antd/es/layout'
-import Typography from 'antd/es/typography'
+
+import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
+import makeStyles from '@material-ui/styles/makeStyles'
 import Navbar from 'components/Navbar'
 import ColorPicker from 'components/pages/editor/ColorPicker'
 import EditorGrid from 'components/pages/editor/EditorGrid'
@@ -17,11 +19,36 @@ import { resetTool} from 'state-slices/editorToolsSlice'
 import { resetColor } from 'state-slices/colorPickerSlice'
 import { resetFramesState } from 'state-slices/framesSlice'
 
-const { Title } = Typography
-const { Header, Footer, Sider, Content } = Layout
+
+
+const useStyles = makeStyles({
+    root: {
+        height: '80%',
+        flexGrow: 1,
+    },
+    grid: {
+        height: '100%'
+    },
+    sider: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        background: 'radial-gradient(#ffffff, #000000)',
+
+    },
+    editorGrid: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+    }
+})
+
 
 const EditorPage = (props) => {
     const dispatch = useDispatch()
+    const classes = useStyles()
     const [saved, setSaved] = useState(false)
     const [cookies] = useCookies(['token'])
 
@@ -30,7 +57,6 @@ const EditorPage = (props) => {
             props.history.push('/')
         }
     })
-
 
     useEffect(() => {
         return () => {
@@ -48,31 +74,28 @@ const EditorPage = (props) => {
                 when={!saved}
                 message='You have unsaved changes, are you sure you want to leave?'
             />
-            <Layout style={{ height: '100vh' }}>
-                <Header>
-                    <Navbar currentPage={'editor'} history={props.history} saveButton={true} setSaved={setSaved}/>
-                </Header>
-                <Layout>
-                    <Sider width={250} >
+            <Container maxWidth='xl' className={classes.root} >
+                <Navbar currentPage='editor' history={props.history} saveButton={true} setSaved={setSaved} />
+                <Grid
+                    className={classes.grid}
+                    container
+                    justify='space-between'
+                >
+                    <Grid item sm className={classes.sider}>
                         <ColorPicker />
                         <PreviewLoop />
                         <DrawSizeChanger />
-                    </Sider>
-                    <Layout>
-                        <Content className='main-content' >
-                            <EditorTools />
-                            <EditorGrid setSaved={setSaved} />
-                        </Content>
-                    </Layout>
-                    <Sider width={250}>
-                        <Title level={4} style={{ marginTop: '15px' }}>
-                            Frame Sequence
-                        </Title>
+                    </Grid>
+                    <Grid item md={8} className={classes.editorGrid} >
+                        <EditorTools />
+                        {props.location.state && <EditorGrid setSaved={setSaved} mapId={props.location.state.id} />}
+                        {!props.location.state && <EditorGrid setSaved={setSaved} mapId={undefined} />}
+                    </Grid>
+                    <Grid item sm className={classes.sider}>
                         <Frames />
-                    </Sider>
-                </Layout>
-                <Footer></Footer>
-            </Layout>
+                    </Grid>
+                </Grid>
+            </Container>
         </>
     )
 }

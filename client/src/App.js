@@ -3,7 +3,6 @@ import { Switch, Route } from "react-router-dom"
 import EditorPage from './components/pages/editor/EditorPage'
 import HomePage from './components/pages/home/HomePage'
 import ProfilePage from 'components/pages/profile/ProfilePage'
-import 'antd/dist/antd.css'
 import './App.css'
 
 function App() {

@@ -1,40 +1,73 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { changeTool } from 'state-slices/editorToolsSlice'
-import Menu from 'antd/es/menu'
-import DrawSizeChanger from 'components/pages/editor/DrawSizeChanger'
 
-import { BiPencil, BiEraser } from 'react-icons/bi'
-import { IoEyedropSharp } from 'react-icons/io5'
+import Toolbar from '@material-ui/core/Toolbar'
+import Radio from '@material-ui/core/Radio'
+import Tooltip from '@material-ui/core/Tooltip'
+import Create from '@material-ui/icons/Create'
+import ColorizeIcon from '@material-ui/icons/Colorize'
+
+import { BiEraser } from 'react-icons/bi'
 import { VscMirror } from 'react-icons/vsc'
 
+
 const EditorTools = () => {
-    const [currentTool, setCurrentTool] = useState('')
+    const [activeTool, setActiveTool] = useState('')
     const dispatch = useDispatch()
 
-    const handleClick = e => {
-        dispatch(changeTool(e.key))
-        setCurrentTool(e.key)
+    const setTool = (tool) => {
+        dispatch(changeTool(tool))
+        setActiveTool(tool)
     }
 
     return (
-        <Menu onClick={handleClick} selectedKeys={currentTool} mode='horizontal'>
-            <Menu.Item className='menu-tool-container' key='draw'>
-                <BiPencil size='lg' className='menu-tool-icon' />
-            </Menu.Item>
-            <Menu.Item className='menu-tool-container' key='erase'>
-                <BiEraser size='lg' className='menu-tool-icon' />
-            </Menu.Item>
-            <Menu.Item className='menu-tool-container' key='pick'>
-                <IoEyedropSharp size='lg' className='menu-tool-icon' />
-            </Menu.Item>
-            <Menu.Item className='menu-tool-container' key='mirror'>
-                <VscMirror size='lg' className='menu-tool-icon' />
-            </Menu.Item>
-            <Menu.SubMenu>
-                <DrawSizeChanger />
-            </Menu.SubMenu>
-        </Menu>
+        <Toolbar style={{ borderBottom: 'black solid 2px', marginBottom: '5px' }}>
+            <Tooltip title='Draw'>
+                <Radio
+                    checked={activeTool === 'draw'}
+                    checkedIcon={<Create />}
+                    onChange={() => setTool('draw')}
+                    name="radio-button-demo"
+                    inputProps={{ 'aria-label': 'A' }}
+                    ac
+                    icon={<Create />}
+                />
+            </Tooltip>
+            <Tooltip title='Erase'>
+                <Radio
+                    checked={activeTool === 'erase'}
+                    checkedIcon={<BiEraser />}
+                    onChange={() => setTool('erase')}
+                    name="radio-button-demo"
+                    inputProps={{ 'aria-label': 'A' }}
+                    ac
+                    icon={<BiEraser />}
+                />
+            </Tooltip>
+            <Tooltip title='Select Color'>
+                <Radio
+                    checked={activeTool === 'pick'}
+                    checkedIcon={<ColorizeIcon />}
+                    onChange={() => setTool('pick')}
+                    name="radio-button-demo"
+                    inputProps={{ 'aria-label': 'A' }}
+                    ac
+                    icon={<ColorizeIcon />}
+                />
+            </Tooltip>
+            <Tooltip title='Mirror'>
+                <Radio
+                    checked={activeTool === 'mirror'}
+                    checkedIcon={<VscMirror />}
+                    onChange={() => setTool('mirror')}
+                    name="radio-button-demo"
+                    inputProps={{ 'aria-label': 'A' }}
+                    ac
+                    icon={<VscMirror />}
+                />
+            </Tooltip>
+        </Toolbar>
     )
 }
 

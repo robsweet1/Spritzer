@@ -10,15 +10,19 @@ const SpriteSchema = new Schema({
     },
     name: {
         type: String,
-        required: true,
+        required: true
     },
     frames: [{
         id: String,
         array: []
     }],
+    dimensions: {
+        width: Number,
+        height: Number
+    },
     email: {
         type: String,
-        required: true,
+        required: true
     }
 })
 

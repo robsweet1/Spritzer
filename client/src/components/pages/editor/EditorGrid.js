@@ -1,9 +1,13 @@
 import Sketch from 'react-p5'
-import { useEffect, useRef} from 'react'
+import { useState, useEffect, useRef} from 'react'
 import { useSelector, useDispatch} from 'react-redux'
-import { resetTool, selectDrawSize, selectEditorTool } from 'state-slices/editorToolsSlice'
-import { selectColor, changeColor, resetColor } from 'state-slices/colorPickerSlice'
-import { selectFrames, selectCurrentFrameId, updateFrame, resetFramesState, selectDimensions } from 'state-slices/framesSlice'
+import { getSpriteById } from 'api/sprite'
+import { selectDrawSize, selectEditorTool } from 'state-slices/editorToolsSlice'
+import { selectColor, changeColor } from 'state-slices/colorPickerSlice'
+import { selectFrames, selectCurrentFrameId, updateFrame, selectDimensions, loadSprite  } from 'state-slices/framesSlice'
+import Box from '@material-ui/core/Box'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import { useCookies } from 'react-cookie'
 
 const EditorGrid = (props) => {
     const mapTool = useSelector(selectEditorTool)
@@ -12,22 +16,39 @@ const EditorGrid = (props) => {
     const framesArray = useSelector(selectFrames)
     const dimensions = useSelector(selectDimensions)
     const currentFrameId = useSelector(selectCurrentFrameId)
+    const [cookies] = useCookies()
     const gridArray = useRef([])
     const dispatch = useDispatch()
+    const [loading, setLoading] = useState(true)
 
     let width = dimensions.width
     let height = dimensions.height
     let scale = 640 / width
     let gridWidth = width * scale
 
-
     useEffect(() => {
-        return () => {
-            dispatch(resetFramesState())
-            dispatch(resetTool())
-            dispatch(resetColor())
+        if(!props.mapId){
+            setLoading(false)
+            return
         }
+        getSpriteById(props.mapId, cookies.token)
+            .then(response => {
+                const payload = {
+                    id: response.data.id,
+                    name: response.data.name,
+                    currentFrameId: response.data.frames[0].id,
+                    frames: response.data.frames,
+                    dimensions: response.data.dimensions,
+                    email: response.data.email
+                }
+                dispatch(loadSprite(payload))
+            })
+            .then(() => {
+                setLoading(false)
+            })
     }, [])
+
+
     
     useEffect(() => {
         if(framesArray.find(item => item.id === currentFrameId)){
@@ -167,7 +188,14 @@ const EditorGrid = (props) => {
     }
 
     return (
-        <Sketch setup={setup} draw={draw} mouseClicked={toolUse} mouseDragged={toolUse} mouseMoved={mouseMoved}/>
+        <>
+        {!loading && <Sketch setup={setup} draw={draw} mouseClicked={toolUse} mouseDragged={toolUse} mouseMoved={mouseMoved}/>}
+        {loading && (
+            <Box>
+                <CircularProgress />
+            </Box>
+        )}
+        </>
     )
 }
 

@@ -1,25 +1,58 @@
 import { useEffect, useState } from 'react'
-import { getSpriteById, getSpritesByUser } from 'api/sprite'
+import { getSpritesByUser } from 'api/sprite'
 import { useCookies } from 'react-cookie'
-import { useDispatch } from 'react-redux'
-import { loadSprite } from 'state-slices/framesSlice'
-import Button from 'antd/es/button'
-import Layout from 'antd/es/layout'
+
+
+import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
+import Box from '@material-ui/core/Box'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import makeStyles from '@material-ui/styles/makeStyles'
+
+
 import Navbar from 'components/Navbar'
 import NewSpriteModal from 'components/pages/home/NewSpriteModal'
 import { getProfile } from 'api/auth'
 
 
-const { Header, Footer, Sider, Content } = Layout
+const useStyles = makeStyles({
+    root: {
+        height: '80%',
+        flexGrow: 1,
+    },
+    grid: {
+        height: '100%'
+    },
+    sider: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        background: 'radial-gradient(#ffffff, #000000)',
+    },
+    mainContent: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+    }
+})
 
 const ProfilePage = (props) => {
+    const classes = useStyles()
     const [modalOpen, setModalOpen] = useState(false)
     const [username, setUsername] = useState('')
     const [loading, setLoading] = useState(true)
     const [sprites, setSprites] = useState([])
     const [cookies] = useCookies()
-    const dispatch = useDispatch()
 
+    useEffect(() => {
+        if (!cookies.token){
+            props.history.push('/')
+        }
+    })
+    
     useEffect(() => {
         getProfile(cookies.token)
             .then(user => setUsername(user.email))
@@ -35,53 +68,47 @@ const ProfilePage = (props) => {
     }, [cookies.token])
 
     const openSprite = (id) => {
-        getSpriteById(id, cookies.token)
-            .then(response => {
-                console.log(response)
-                const payload = {
-                    id: response.data.id,
-                    name: response.data.name,
-                    currentFrameId: response.data.frames[0].id,
-                    frames: response.data.frames,
-                    dimensions: response.data.dimensions,
-                    email: response.data.email
-                }
-                dispatch(loadSprite(payload))
-                props.history.push('/editor')
-            })
+        const state = {
+            id: id
+        }
+        props.history.push('/editor', state)
     }
 
     return (
-        <Layout style={{ height: '100vh' }}>
+
+        <Container maxWidth='xl' className={classes.root} >
             {modalOpen ? <NewSpriteModal setModalOpen={setModalOpen} /> : null}
-            <Header>
-                <Navbar currentPage={'profile'} history={props.history} />
-            </Header>
-            <Layout>
-                <Sider width={250} >
-                </Sider>
-                <Layout>
-                    <Content className='main-content' >
-                        <Button onClick={() => setModalOpen(true)}>New Sprite</Button>
-                        <div className='sprite-card-grid'>
-                            {loading && <h2>Loading...</h2>}
-                            {sprites.map(sprite => {
-                                return (
-                                    <div className='sprite-card' key={sprite.id}>
-                                        <h2>{sprite.name}</h2>
-                                        <button onClick={() => openSprite(sprite.id)}>Open</button>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </Content>
-                </Layout>
-                <Sider width={250}>
+            <Navbar currentPage={'profile'} history={props.history} />
+            <Grid
+                className={classes.grid}
+                container
+                justify='space-between'
+            >
+                <Grid item sm className={classes.sider}>
+                </Grid>
+                <Grid item md={8} className={classes.mainContent}>
+                    <Button onClick={() => setModalOpen(true)}>New Sprite</Button>
+                    <div className='sprite-card-grid'>
+                        {loading && (
+                            <Box>
+                                <CircularProgress />
+                            </Box>
+                        )}
+                        {sprites.map(sprite => {
+                            return (
+                                <div className='sprite-card' key={sprite.id}>
+                                    <h2>{sprite.name}</h2>
+                                    <button onClick={() => openSprite(sprite.id)}>Open</button>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </Grid>
+                <Grid item sm className={classes.sider}>
                     <h1>{username}</h1>
-                </Sider>
-            </Layout>
-            <Footer></Footer>
-        </Layout>
+                </Grid>
+            </Grid>
+        </Container>
     )
 }
 

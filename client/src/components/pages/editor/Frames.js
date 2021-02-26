@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { changeCurrentFrameId, selectFrames, selectDimensions, addFrame, updateAllFrames } from 'state-slices/framesSlice'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import Button from 'antd/es/button'
+import Button from '@material-ui/core/Button'
 import shortId from 'shortid'
-// import LazyLoad from 'react-lazyload'
 import Frame from 'components/pages/editor/Frame'
+import Add from '@material-ui/icons/Add'
 
 const Frames = (props) => {
     const dispatch = useDispatch()
@@ -38,7 +38,7 @@ const Frames = (props) => {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable" >
+            <Droppable droppableId='droppable' >
                 {(provided) => {
                     return (
                         <div
@@ -47,13 +47,8 @@ const Frames = (props) => {
                         >
                             {framesArray.map((frame, index) => {
                                 return (
-                                    // <LazyLoad
-                                    //     height={200}
-                                    //     once={true}
-                                    //     overflow={true}
-                                    //     key={frame.id}
-                                    // >
                                         <Draggable
+                                            key={frame.id}
                                             draggableId={frame.id}
                                             index={index}
                                             className='frame-preview vertical-flex'
@@ -74,7 +69,6 @@ const Frames = (props) => {
                                                 )
                                             }}
                                         </Draggable>
-                                    // </LazyLoad>
                                 )
                             })}
                             {provided.placeholder}
@@ -82,8 +76,12 @@ const Frames = (props) => {
                     )
                 }}
             </Droppable>
-            <Button onClick={newFrame}>
-                Add Frame
+            <Button 
+                color='primary' 
+                onClick={newFrame}
+                startIcon={<Add />}
+            >
+                New Frame
             </Button>
         </DragDropContext>
     )

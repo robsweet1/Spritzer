@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { useSelector } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import Button from '@material-ui/core/Button'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -18,6 +18,7 @@ import { selectFrames, selectName, selectId, selectDimensions } from 'state-slic
 const useStyles = makeStyles({
     root: {
         flexGrow: 1,
+        marginBottom: '10px'
     },
     title: {
         flexGrow: 10,
@@ -35,35 +36,6 @@ const Navbar = (props) => {
     const dimensions = useSelector(selectDimensions)
     const [cookies, setCookie, removeCookie] = useCookies()
 
-    // const LeftMenu = () => {
-    //     return (
-    //         <Menu className='nav' selectedKeys={props.currentPage} mode='horizontal'>
-    //             <Menu.Item key='home'>
-    //                 <Link to='/'>
-    //                     Home
-    //                 </Link>
-    //             </Menu.Item>
-    //             <Menu.Item key='Save'>
-    //                 {props.saveButton && <Button onClick={() => handleSave()}>Save Sprite</Button>}
-    //             </Menu.Item>
-    //         </Menu>
-    //     )
-    // }
-
-    // const RightMenu = () => {
-    //     return (
-    //         <Menu className='nav' mode='horizontal'>
-    //             <Menu.Item key='auth'>
-    //                 {cookies.token && <Button onClick={() => handleLogout()}>Log Out</Button>}
-    //                 {!cookies.token && <Button onClick={() => openMenu('login')}>Log In</Button>}
-    //             </Menu.Item>
-    //             <Menu.Item key='signup'>
-    //                 {!cookies.token && <Button onClick={() => openMenu('signup')}>Sign Up</Button>}
-    //             </Menu.Item>
-    //         </Menu>
-    //     )
-    // }
-
     const openRouteMenu = (event) => {
         setAnchorEl(event.currentTarget)
     }
@@ -78,6 +50,7 @@ const Navbar = (props) => {
     }
 
     const handleLogout = () => {
+        removeCookie('token')
         props.history.push('/')
     }
 
@@ -103,12 +76,8 @@ const Navbar = (props) => {
     }
 
     return (
-        // <nav className='nav'>
-        //     <LeftMenu />
-        //     <RightMenu />
-        // </nav>
         <div className={classes.root}>
-            <AppBar position="static">
+            <AppBar position='relative'>
                 <Toolbar>
                     <IconButton 
                         edge="start"
@@ -165,6 +134,7 @@ const Navbar = (props) => {
                     )}
                 </Toolbar>
             </AppBar>
+            {/* <Toolbar /> */}
         </div>
     )
 }
